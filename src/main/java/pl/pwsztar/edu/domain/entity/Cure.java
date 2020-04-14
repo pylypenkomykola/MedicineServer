@@ -2,12 +2,11 @@ package pl.pwsztar.edu.domain.entity;
 
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Set;
 
 @Entity
 @Table(name="cure" , schema = "medicine")
-public class Cure implements Serializable {
+public class Cure{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

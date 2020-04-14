@@ -14,25 +14,29 @@ public class Client implements Serializable {
     @Column(name = "id_client")
     private Long clientId;
 
+    @Column(name="email")
+    private String email;
+
+    @Column(name="name")
+    private String name;
+
+    @Column(name="surname")
+    private String surname;
+
+    @Column(name="phone_number")
+    private String phoneNumber;
+
+    @Column(name="password")
+    private String password;
+
     public Client() {
     }
-
-    @OneToMany(mappedBy = "client")
-    private Set<ClientPersonal> personal;
 
     @OneToMany(mappedBy = "client")
     private Set<AcceptedDose> acceptedDoses;
 
     @OneToMany(mappedBy = "client")
     private Set<ClientDose> dose;
-
-    public Set<ClientPersonal> getPersonal() {
-        return personal;
-    }
-
-    public void setPersonal(Set<ClientPersonal> personal) {
-        this.personal = personal;
-    }
 
     public Set<AcceptedDose> getAcceptedDoses() {
         return acceptedDoses;
@@ -58,4 +62,43 @@ public class Client implements Serializable {
         this.clientId = clientId;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
