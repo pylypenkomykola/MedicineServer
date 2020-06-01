@@ -11,6 +11,10 @@ public class AcceptedDoseKey implements Serializable {
     @Column(name = "id_client")
     private Long clientId;
 
+    @Column(name = "id_cure")
+    private Long cureId;
+
+
     public AcceptedDoseKey() {
     }
 
@@ -18,8 +22,8 @@ public class AcceptedDoseKey implements Serializable {
         return clientId;
     }
 
-    public void setClientId(Long clientId) {
-        this.clientId = clientId;
+    public Long getCureId() {
+        return cureId;
     }
 
     @Override
@@ -27,11 +31,12 @@ public class AcceptedDoseKey implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AcceptedDoseKey that = (AcceptedDoseKey) o;
-        return Objects.equals(getClientId(), that.getClientId());
+        return Objects.equals(getClientId(), that.getClientId()) &&
+                Objects.equals(getCureId(), that.getCureId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getClientId());
+        return Objects.hash(getClientId(), getCureId());
     }
 }

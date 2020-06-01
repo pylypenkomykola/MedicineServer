@@ -16,20 +16,18 @@ public class ClientDoseKey implements Serializable {
     public ClientDoseKey() {
     }
 
+    public ClientDoseKey(Long clientId, Long cureId) {
+        this.clientId = clientId;
+        this.cureId = cureId;
+    }
+
     public Long getClientId() {
         return clientId;
     }
 
-    public void setClientId(Long clientId) {
-        this.clientId = clientId;
-    }
 
     public Long getCureId() {
         return cureId;
-    }
-
-    public void setCureId(Long cureId) {
-        this.cureId = cureId;
     }
 
     @Override

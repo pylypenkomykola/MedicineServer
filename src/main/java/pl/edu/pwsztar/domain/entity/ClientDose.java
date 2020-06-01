@@ -1,94 +1,81 @@
 package pl.edu.pwsztar.domain.entity;
 
-
 import pl.edu.pwsztar.domain.entity.key.ClientDoseKey;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name="dose_of_client"  , schema = "medicine")
-public class ClientDose{
+public class ClientDose implements Serializable {
+
     @EmbeddedId
-    private ClientDoseKey id;
+    private ClientDoseKey clientDoseKey;
 
     @ManyToOne
     @MapsId("id_client")
-    @JoinColumn(name = "id_client")
+    @JoinColumn(name = "id_client", referencedColumnName = "id_client")
     private Client client;
 
     @ManyToOne
     @MapsId("id_cure")
-    @JoinColumn(name = "id_cure")
+    @JoinColumn(name = "id_cure", referencedColumnName = "id_cure")
     private Cure cure;
 
-    @Column(name="name")
-    private String name;
-
-    @Column(name="daily_of_dose")
-    private Integer dailyDose;
-
-    @Column(name="dose_timestamp")
-    private Integer doseTimestamp;
-
-    @Column(name="number_of_dose")
-    private Integer doseNumber;
 
     public ClientDose() {
     }
 
-    public ClientDoseKey getId() {
-        return id;
+    private ClientDose(Builder builder) {
+        this.clientDoseKey = builder.clientDoseKey;
+        this.client = builder.client;
+        this.cure = builder.cure;
     }
 
-    public void setId(ClientDoseKey id) {
-        this.id = id;
+    public ClientDoseKey getClientDoseKey() {
+        return clientDoseKey;
     }
 
     public Client getClient() {
         return client;
     }
 
-    public void setClient(Client client) {
-        this.client = client;
-    }
-
     public Cure getCure() {
         return cure;
     }
 
-    public void setCure(Cure cure) {
-        this.cure = cure;
+    public static final class Builder{
+        private ClientDoseKey clientDoseKey;
+        private Client client;
+        private Cure cure;
+
+        public Builder() {
+        }
+
+        public Builder(ClientDose copy) {
+            this.clientDoseKey = copy.getClientDoseKey();
+            this.client = copy.getClient();
+            this.cure = copy.getCure();
+        }
+
+        public Builder clientDoseKey(ClientDoseKey clientDoseKey){
+            this.clientDoseKey = clientDoseKey;
+            return this;
+        }
+
+        public Builder client(Client client){
+            this.client = client;
+            return this;
+        }
+
+        public Builder cure(Cure cure){
+            this.cure = cure;
+            return this;
+        }
+
+        public ClientDose build(){
+            return new ClientDose(this);
+        }
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Integer getDailyDose() {
-        return dailyDose;
-    }
-
-    public void setDailyDose(Integer dailyDose) {
-        this.dailyDose = dailyDose;
-    }
-
-    public Integer getDoseTimestamp() {
-        return doseTimestamp;
-    }
-
-    public void setDoseTimestamp(Integer doseTimestamp) {
-        this.doseTimestamp = doseTimestamp;
-    }
-
-    public Integer getDoseNumber() {
-        return doseNumber;
-    }
-
-    public void setDoseNumber(Integer doseNumber) {
-        this.doseNumber = doseNumber;
-    }
 }

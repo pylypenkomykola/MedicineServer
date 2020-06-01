@@ -1,8 +1,6 @@
 package pl.edu.pwsztar.domain.entity;
 
 
-import pl.edu.pwsztar.domain.dto.ClientDto;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
@@ -35,7 +33,6 @@ public class Client implements Serializable {
     }
 
     public Client(Builder builder) {
-        this.clientId = builder.clientId;
         this.email = builder.email;
         this.name = builder.name;
         this.surname = builder.surname;
@@ -96,15 +93,15 @@ public class Client implements Serializable {
         public Builder() {
         }
 
-        public Builder(Client copy) {
+        public Builder(Client copy){
             this.clientId = copy.getClientId();
-            this.acceptedDoses = copy.getAcceptedDoses();
-            this.dose = copy.getDose();
             this.email = copy.getEmail();
             this.name = copy.getName();
             this.surname = copy.getSurname();
             this.phoneNumber = copy.getPhoneNumber();
-            this.password = copy.getPassword();
+            this.password =copy.getPassword();
+            this.acceptedDoses = copy.getAcceptedDoses();
+            this.dose = copy.getDose();
         }
 
         public Builder clientId(Long clientId){

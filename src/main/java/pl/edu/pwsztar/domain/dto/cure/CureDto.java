@@ -1,52 +1,32 @@
-package pl.edu.pwsztar.domain.entity;
+package pl.edu.pwsztar.domain.dto.cure;
 
+import pl.edu.pwsztar.domain.entity.AcceptedDose;
+import pl.edu.pwsztar.domain.entity.ClientDose;
+import pl.edu.pwsztar.domain.entity.Cure;
 
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
 
-@Entity
-@Table(name="cure" , schema = "medicine")
-public class Cure implements Serializable {
+public class CureDto implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id_cure")
-    private Long cureId;
-
-    @Column(name="name")
     private String name;
-
-    @Column(name="daily_of_dose")
     private Integer dailyDose;
-
-    @Column(name="dose_timestamp")
     private Integer doseTimestamp;
-
-    @Column(name="number_of_dose")
     private Integer doseNumber;
+    private Set<ClientDose> dose;
+    private Set<AcceptedDose> acceptedDose;
 
-    public Cure() {
+
+    public CureDto() {
     }
 
-    public Cure(Builder builder) {
-        this.cureId = builder.cureId;
+    public CureDto(Builder builder) {
         this.name = builder.name;
         this.dailyDose = builder.dailyDose;
         this.doseTimestamp = builder.doseTimestamp;
         this.doseNumber = builder.doseNumber;
         this.dose = builder.dose;
         this.acceptedDose = builder.acceptedDose;
-    }
-
-    @OneToMany(mappedBy = "cure")
-    private Set<ClientDose> dose;
-
-    @OneToMany(mappedBy = "cure")
-    private Set<AcceptedDose> acceptedDose;
-
-    public Long getCureId() {
-        return cureId;
     }
 
     public String getName() {
@@ -74,32 +54,12 @@ public class Cure implements Serializable {
     }
 
     public static final class Builder{
-        private Long cureId;
         private String name;
         private Integer dailyDose;
         private Integer doseTimestamp;
         private Integer doseNumber;
         private Set<ClientDose> dose;
         private Set<AcceptedDose> acceptedDose;
-
-        public Builder() {
-        }
-
-        public Builder(Cure copy){
-            this.cureId = copy.getCureId();
-            this.name = copy.getName();
-            this.dailyDose = copy.getDailyDose();
-            this.doseTimestamp = copy.getDoseTimestamp();
-            this.doseNumber = copy.getDoseNumber();
-            this.dose = copy.getDose();
-            this.acceptedDose = copy.getAcceptedDose();
-        }
-
-
-        public Builder cureId(Long cureId){
-            this.cureId = cureId;
-            return this;
-        }
 
         public Builder name(String name){
             this.name = name;
@@ -131,9 +91,8 @@ public class Cure implements Serializable {
             return this;
         }
 
-        public Cure build(){
-            return new Cure(this);
+        public CureDto build(){
+            return new CureDto(this);
         }
     }
-
 }

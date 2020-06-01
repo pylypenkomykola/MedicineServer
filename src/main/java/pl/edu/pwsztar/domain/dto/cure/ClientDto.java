@@ -1,4 +1,4 @@
-package pl.edu.pwsztar.domain.dto;
+package pl.edu.pwsztar.domain.dto.cure;
 
 import pl.edu.pwsztar.domain.entity.AcceptedDose;
 import pl.edu.pwsztar.domain.entity.ClientDose;

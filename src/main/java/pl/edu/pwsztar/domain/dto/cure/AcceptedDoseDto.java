@@ -1,47 +1,30 @@
-package pl.edu.pwsztar.domain.entity;
+package pl.edu.pwsztar.domain.dto.cure;
 
 
-import pl.edu.pwsztar.domain.entity.key.AcceptedDoseKey;
+import pl.edu.pwsztar.domain.entity.AcceptedDose;
+import pl.edu.pwsztar.domain.entity.Client;
+import pl.edu.pwsztar.domain.entity.Cure;
 
-import javax.persistence.*;
+
 import java.io.Serializable;
+import java.util.Set;
 
-@Entity
-@Table(name="accepted_dose"  , schema = "medicine")
-public class AcceptedDose implements Serializable {
-
-    @EmbeddedId
-    private AcceptedDoseKey id;
-
-    @ManyToOne
-    @MapsId("id_client")
-    @JoinColumn(name = "id_client")
+public class AcceptedDoseDto implements Serializable {
     private Client client;
-
-    @ManyToOne
-    @MapsId("id_cure")
-    @JoinColumn(name = "id_cure")
     private Cure cure;
-
-    @Column(name="accepted")
     private boolean accepted;
-
-    @Column(name="delayed")
     private boolean delayed;
 
-    public AcceptedDose() {
+    public AcceptedDoseDto() {
     }
 
-    private AcceptedDose(Builder builder) {
+    private AcceptedDoseDto(Builder builder) {
         this.client = builder.client;
         this.cure = builder.cure;
         this.accepted = builder.accepted;
         this.delayed = builder.delayed;
     }
 
-    public AcceptedDoseKey getId() {
-        return id;
-    }
 
     public Client getClient() {
         return client;
@@ -60,26 +43,16 @@ public class AcceptedDose implements Serializable {
     }
 
     public static final class Builder{
-        private AcceptedDoseKey id;
         private Client client;
         private Cure cure;
         private boolean accepted;
         private boolean delayed;
 
-        public Builder() {
-        }
-
-        public Builder(AcceptedDose copy){
-            this.id = copy.getId();
+        public Builder(AcceptedDoseDto copy){
             this.client = copy.getClient();
             this.cure = copy.getCure();
             this.accepted = copy.isAccepted();
             this.delayed = copy.isDelayed();
-        }
-
-        public Builder id(AcceptedDoseKey id){
-            this.id = id;
-            return this;
         }
 
         public Builder client(Client client){
@@ -102,8 +75,10 @@ public class AcceptedDose implements Serializable {
             return this;
         }
 
-        public AcceptedDose build(){
-            return new AcceptedDose(this);
+
+        public AcceptedDoseDto build(){
+            return new AcceptedDoseDto(this);
         }
     }
+
 }
