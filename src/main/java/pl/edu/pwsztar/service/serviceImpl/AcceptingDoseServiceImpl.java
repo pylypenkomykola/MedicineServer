@@ -130,15 +130,15 @@ public class AcceptingDoseServiceImpl implements AcceptingDoseService {
             ClientDoseReportDto report = null;
             if(acceptedDose.isAccepted() && !acceptedDose.isDelayed()){
                 accepted++;
-                report = new ClientDoseReportDto.Builder().acceptedDose("Accepted").date(acceptedDose.getDate()).build();
+                report = new ClientDoseReportDto.Builder().name(acceptedDose.getCure().getName()).acceptedDose("Accepted").date(acceptedDose.getDate()).build();
             }
             if(acceptedDose.isAccepted() && acceptedDose.isDelayed()){
                 delayed++;
-                report = new ClientDoseReportDto.Builder().acceptedDose("Delayed").date(acceptedDose.getDate()).build();
+                report = new ClientDoseReportDto.Builder().name(acceptedDose.getCure().getName()).acceptedDose("Delayed").date(acceptedDose.getDate()).build();
             }
             if(!acceptedDose.isAccepted() && !acceptedDose.isDelayed()){
                 declined++;
-                report = new ClientDoseReportDto.Builder().acceptedDose("Declined").date(acceptedDose.getDate()).build();
+                report = new ClientDoseReportDto.Builder().name(acceptedDose.getCure().getName()).acceptedDose("Declined").date(acceptedDose.getDate()).build();
             }
             reportList.add(report);
         }
