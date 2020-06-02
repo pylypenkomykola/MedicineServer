@@ -1,6 +1,0 @@
-package pl.pwsztar.edu.domain.dto;
-
-import java.io.Serializable;
-
-public class ClientDto implements Serializable {
-}
