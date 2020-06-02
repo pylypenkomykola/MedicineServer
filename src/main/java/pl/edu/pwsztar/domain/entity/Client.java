@@ -44,12 +44,12 @@ public class Client implements Serializable {
     }
 
     @OneToMany(mappedBy = "client")
-    private Set<AcceptedDose> acceptedDoses;
+    private List<AcceptedDose> acceptedDoses;
 
     @OneToMany(mappedBy = "client")
     private List<ClientDose> dose;
 
-    public Set<AcceptedDose> getAcceptedDoses() {
+    public List<AcceptedDose> getAcceptedDoses() {
         return acceptedDoses;
     }
 
@@ -83,7 +83,7 @@ public class Client implements Serializable {
 
     public static final class Builder{
         private Long clientId;
-        private Set<AcceptedDose> acceptedDoses;
+        private List<AcceptedDose> acceptedDoses;
         private List<ClientDose> dose;
         private String email;
         private String name;
@@ -110,7 +110,7 @@ public class Client implements Serializable {
             return this;
         }
 
-        public Builder acceptedDoses(Set<AcceptedDose> acceptedDoses){
+        public Builder acceptedDoses(List<AcceptedDose> acceptedDoses){
             this.acceptedDoses=acceptedDoses;
             return this;
         }

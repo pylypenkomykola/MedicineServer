@@ -3,6 +3,9 @@ package pl.edu.pwsztar.service.serviceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import pl.edu.pwsztar.domain.dto.cure.ClientDoseInfoDto;
+import pl.edu.pwsztar.domain.dto.cure.ClientDoseReportDto;
+import pl.edu.pwsztar.domain.dto.cure.ClientInfo;
 import pl.edu.pwsztar.domain.dto.cure.CureDto;
 import pl.edu.pwsztar.domain.entity.AcceptedDose;
 import pl.edu.pwsztar.domain.entity.Client;
@@ -109,6 +112,38 @@ public class AcceptingDoseServiceImpl implements AcceptingDoseService {
         }
 
         return false;
+    }
+
+    @Override
+    public ClientInfo makeStats(Long userId) {
+        Client client = clientRepository.findClient(userId);
+        List<AcceptedDose> acceptedDoses = client.getAcceptedDoses();
+        List<ClientDoseReportDto> reportList = new ArrayList<>();
+
+        int accepted = 0;
+        int declined = 0;
+        int delayed = 0;
+
+        for(AcceptedDose acceptedDose: acceptedDoses){
+            ClientDoseReportDto report = null;
+            if(acceptedDose.isAccepted() && !acceptedDose.isDelayed()){
+                accepted++;
+                report = new ClientDoseReportDto.Builder().acceptedDose("Accepted").date(acceptedDose.getDate()).build();
+            }
+            if(acceptedDose.isAccepted() && acceptedDose.isDelayed()){
+                delayed++;
+                report = new ClientDoseReportDto.Builder().acceptedDose("Delayed").date(acceptedDose.getDate()).build();
+            }
+            if(!acceptedDose.isAccepted() && !acceptedDose.isDelayed()){
+                declined++;
+                report = new ClientDoseReportDto.Builder().acceptedDose("Declined").date(acceptedDose.getDate()).build();
+            }
+            reportList.add(report);
+        }
+
+        ClientDoseInfoDto info = new ClientDoseInfoDto.Builder().acceptedDose(accepted).declinedDose(declined).delayedDose(delayed).build();
+
+        return new ClientInfo.Builder().info(info).report(reportList).build();
     }
 
     @Scheduled(initialDelay = 5000, fixedDelay = 1000 * 60)
