@@ -43,7 +43,7 @@ public class AcceptingDoseServiceImpl implements AcceptingDoseService {
         this.clientDoseMapper = clientDoseMapper;
     }
 
-    public void sendNotification(Client client, Cure cure){
+    public void sendNotification(Client client, Cure cure, int time){
         String email = "medicine.notification@gmail.com";
         String password = "198343583";
 
@@ -70,7 +70,8 @@ public class AcceptingDoseServiceImpl implements AcceptingDoseService {
             );
             message.setSubject("Medicine: " +cure.getName());
             message.setText("Take your medicine called:" + cure.getName() +
-                    "\nin dose number: " + cure.getDoseNumber());
+                    "\nin dose number: " + cure.getDoseNumber() +
+                    "\nYou have " + time + " minutes");
 
             javax.mail.Transport.send(message);
 
@@ -129,7 +130,7 @@ public class AcceptingDoseServiceImpl implements AcceptingDoseService {
                 System.out.println("Notify: "+ notify +"\nCure time: "+ cureTime);
 
                 if((int)(notify%minutes)==0){
-                    sendNotification(client,cure);
+                    sendNotification(client,cure, notificationTime);
                 }
                 if((int)(minutes%cureTime) == maxDelay){
                     AcceptedDose acceptedDose = new AcceptedDose.Builder().id(new AcceptedDoseKey(client.getClientId(),cure.getCureId())).accepted(false).delayed(false).client(client).cure(cure).date(currentTime).build();
