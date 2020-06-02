@@ -14,13 +14,15 @@ public class AcceptedDoseKey implements Serializable {
     @Column(name = "id_cure")
     private Long cureId;
 
+    private String doseDate;
 
     public AcceptedDoseKey() {
     }
 
-    public AcceptedDoseKey(Long clientId, Long cureId) {
+    public AcceptedDoseKey(Long clientId, Long cureId, String doseDate) {
         this.clientId = clientId;
         this.cureId = cureId;
+        this.doseDate = doseDate;
     }
 
     public Long getClientId() {
@@ -31,17 +33,22 @@ public class AcceptedDoseKey implements Serializable {
         return cureId;
     }
 
+    public String getDate() {
+        return doseDate;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AcceptedDoseKey that = (AcceptedDoseKey) o;
-        return Objects.equals(getClientId(), that.getClientId()) &&
-                Objects.equals(getCureId(), that.getCureId());
+        return Objects.equals(clientId, that.clientId) &&
+                Objects.equals(cureId, that.cureId) &&
+                Objects.equals(doseDate, that.doseDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getClientId(), getCureId());
+        return Objects.hash(clientId, cureId, doseDate);
     }
 }

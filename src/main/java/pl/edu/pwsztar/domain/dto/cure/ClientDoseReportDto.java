@@ -32,7 +32,7 @@ public class ClientDoseReportDto implements Serializable {
         }
 
         public Builder date(String date){
-            this.acceptedDose = acceptedDose;
+            this.date = date;
             return this;
         }
 

@@ -3,6 +3,7 @@ package pl.edu.pwsztar.domain.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -40,10 +41,10 @@ public class Cure implements Serializable {
     }
 
     @OneToMany(mappedBy = "cure")
-    private Set<ClientDose> dose;
+    private List<ClientDose> dose;
 
     @OneToMany(mappedBy = "cure")
-    private Set<AcceptedDose> acceptedDose;
+    private List<AcceptedDose> acceptedDose;
 
     public Long getCureId() {
         return cureId;
@@ -65,11 +66,11 @@ public class Cure implements Serializable {
         return doseNumber;
     }
 
-    public Set<ClientDose> getDose() {
+    public List<ClientDose> getDose() {
         return dose;
     }
 
-    public Set<AcceptedDose> getAcceptedDose() {
+    public List<AcceptedDose> getAcceptedDose() {
         return acceptedDose;
     }
 
@@ -79,8 +80,8 @@ public class Cure implements Serializable {
         private Integer dailyDose;
         private Integer doseTimestamp;
         private Integer doseNumber;
-        private Set<ClientDose> dose;
-        private Set<AcceptedDose> acceptedDose;
+        private List<ClientDose> dose;
+        private List<AcceptedDose> acceptedDose;
 
         public Builder() {
         }
@@ -121,12 +122,12 @@ public class Cure implements Serializable {
             return this;
         }
 
-        public Builder dose(Set<ClientDose> dose){
+        public Builder dose(List<ClientDose> dose){
             this.dose = dose;
             return this;
         }
 
-        public Builder acceptedDose(Set<AcceptedDose> acceptedDose){
+        public Builder acceptedDose(List<AcceptedDose> acceptedDose){
             this.acceptedDose = acceptedDose;
             return this;
         }
