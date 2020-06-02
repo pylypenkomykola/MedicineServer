@@ -33,6 +33,9 @@ public class AcceptingDoseServiceImpl implements AcceptingDoseService {
 
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm");
 
+    private static final Integer notificationTime = 10;
+    private static final Integer maxDelayTime = 1;
+
 
     @Autowired
     public AcceptingDoseServiceImpl(AcceptedDoseRepository doseRepository,
@@ -90,7 +93,6 @@ public class AcceptingDoseServiceImpl implements AcceptingDoseService {
 
         String currentTime = dateFormat.format(new Date());
         Optional<AcceptedDose> checkAcceptedDose = Optional.ofNullable(doseRepository.findInfo(client.getClientId(),cure.getCureId()));
-        int maxDelay = 1;
 
         int minutes = (Integer.parseInt(currentTime.substring(11,13)) * 60) + Integer.parseInt(currentTime.substring(14,16));
         float cureTime = (24/(float)cure.getDoseTimestamp())*60;
@@ -98,13 +100,13 @@ public class AcceptingDoseServiceImpl implements AcceptingDoseService {
 
 
         if(minutes%cureTime == 0){
-            AcceptedDose acceptedDose = new AcceptedDose.Builder().id(new AcceptedDoseKey(client.getClientId(),cure.getCureId())).accepted(true).delayed(false).client(client).cure(cure).date(currentTime).build();
+            AcceptedDose acceptedDose = new AcceptedDose.Builder().id(new AcceptedDoseKey(client.getClientId(),cure.getCureId(),currentTime)).accepted(true).delayed(false).client(client).cure(cure).date(currentTime).build();
             if(checkAcceptedDose.isEmpty() || !checkAcceptedDose.get().getDate().equals(currentTime)) {
                 doseRepository.save(acceptedDose);
                 return true;
             }
-        } else if (minutes%cureTime < maxDelay){
-            AcceptedDose acceptedDose = new AcceptedDose.Builder().id(new AcceptedDoseKey(client.getClientId(),cure.getCureId())).accepted(true).delayed(true).client(client).cure(cure).date(currentTime).build();
+        } else if (minutes%cureTime < maxDelayTime && minutes%cureTime != 0){
+            AcceptedDose acceptedDose = new AcceptedDose.Builder().id(new AcceptedDoseKey(client.getClientId(),cure.getCureId(),currentTime)).accepted(true).delayed(true).client(client).cure(cure).date(currentTime).build();
             if(checkAcceptedDose.isEmpty() || !checkAcceptedDose.get().getDate().equals(currentTime)) {
                 doseRepository.save(acceptedDose);
                 return true;
@@ -128,15 +130,15 @@ public class AcceptingDoseServiceImpl implements AcceptingDoseService {
             ClientDoseReportDto report = null;
             if(acceptedDose.isAccepted() && !acceptedDose.isDelayed()){
                 accepted++;
-                report = new ClientDoseReportDto.Builder().acceptedDose("Accepted").date(acceptedDose.getDate()).build();
+                report = new ClientDoseReportDto.Builder().name(acceptedDose.getCure().getName()).acceptedDose("Accepted").date(acceptedDose.getDate()).build();
             }
             if(acceptedDose.isAccepted() && acceptedDose.isDelayed()){
                 delayed++;
-                report = new ClientDoseReportDto.Builder().acceptedDose("Delayed").date(acceptedDose.getDate()).build();
+                report = new ClientDoseReportDto.Builder().name(acceptedDose.getCure().getName()).acceptedDose("Delayed").date(acceptedDose.getDate()).build();
             }
             if(!acceptedDose.isAccepted() && !acceptedDose.isDelayed()){
                 declined++;
-                report = new ClientDoseReportDto.Builder().acceptedDose("Declined").date(acceptedDose.getDate()).build();
+                report = new ClientDoseReportDto.Builder().name(acceptedDose.getCure().getName()).acceptedDose("Declined").date(acceptedDose.getDate()).build();
             }
             reportList.add(report);
         }
@@ -151,8 +153,6 @@ public class AcceptingDoseServiceImpl implements AcceptingDoseService {
         String currentTime = dateFormat.format(new Date());
         int minutes = (Integer.parseInt(currentTime.substring(11,13)) * 60) + Integer.parseInt(currentTime.substring(14,16));
 
-        int notificationTime = 1; // minutes before take a cure
-        int maxDelay = 1; // minutes with max delay time
 
         List<Client> clients = clientRepository.findAll();
 
@@ -167,8 +167,8 @@ public class AcceptingDoseServiceImpl implements AcceptingDoseService {
                 if((int)(notify%minutes)==0){
                     sendNotification(client,cure, notificationTime);
                 }
-                if((int)(minutes%cureTime) == maxDelay){
-                    AcceptedDose acceptedDose = new AcceptedDose.Builder().id(new AcceptedDoseKey(client.getClientId(),cure.getCureId())).accepted(false).delayed(false).client(client).cure(cure).date(currentTime).build();
+                if((int)(minutes%cureTime) == maxDelayTime){
+                    AcceptedDose acceptedDose = new AcceptedDose.Builder().id(new AcceptedDoseKey(client.getClientId(),cure.getCureId(),currentTime)).accepted(false).delayed(false).client(client).cure(cure).date(currentTime).build();
                     doseRepository.save(acceptedDose);
                 }
             }

@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class ClientDoseReportDto implements Serializable {
     private String acceptedDose;
     private String date;
+    private String name;
 
     public ClientDoseReportDto() {
     }
@@ -12,6 +13,7 @@ public class ClientDoseReportDto implements Serializable {
     public ClientDoseReportDto(Builder builder) {
         this.acceptedDose = builder.acceptedDose;
         this.date = builder.date;
+        this.name = builder.name;
     }
 
     public String getAcceptedDose() {
@@ -22,9 +24,14 @@ public class ClientDoseReportDto implements Serializable {
         return date;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public static final class Builder{
         private String acceptedDose;
         private String date;
+        private String name;
 
         public Builder acceptedDose(String acceptedDose){
             this.acceptedDose = acceptedDose;
@@ -32,7 +39,12 @@ public class ClientDoseReportDto implements Serializable {
         }
 
         public Builder date(String date){
-            this.acceptedDose = acceptedDose;
+            this.date = date;
+            return this;
+        }
+
+        public Builder name(String name){
+            this.name = name;
             return this;
         }
 
