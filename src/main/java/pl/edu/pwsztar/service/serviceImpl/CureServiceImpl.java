@@ -28,7 +28,7 @@ public class CureServiceImpl implements CureService {
     }
 
     @Override
-    public void createNewCure(Long userId, CureDto cure) {
+    public boolean createNewCure(Long userId, CureDto cure) {
         Optional<Cure> findCure = Optional.ofNullable(cureRepository.findCure(cure.getName(), cure.getDailyDose(), cure.getDoseNumber(), cure.getDoseTimestamp()));
         Cure newCure = null;
 
@@ -39,7 +39,8 @@ public class CureServiceImpl implements CureService {
         }
 
         Cure finalNewCure = newCure;
-        clientDoseService.addCureForClient(userId, findCure.orElseGet(() -> finalNewCure));
+
+        return clientDoseService.addCureForClient(userId, findCure.orElseGet(() -> finalNewCure));
     }
 
     @Override

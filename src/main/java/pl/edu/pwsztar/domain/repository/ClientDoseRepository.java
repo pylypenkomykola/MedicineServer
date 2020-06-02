@@ -16,7 +16,4 @@ import java.util.List;
 public interface ClientDoseRepository extends JpaRepository<ClientDose, ClientDoseKey>, CrudRepository<ClientDose,ClientDoseKey> {
     @Query("SELECT client_dose.cure FROM ClientDose client_dose WHERE client_dose.client.clientId = ?1")
     List<Cure> getAllCure(Long clientId);
-
-
-
 }

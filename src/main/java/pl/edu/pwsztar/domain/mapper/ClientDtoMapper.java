@@ -10,8 +10,6 @@ public class ClientDtoMapper implements Convert<ClientDto, Client> {
     @Override
     public Client convert(ClientDto client){
         return new Client.Builder()
-                .dose(client.getDose())
-                .acceptedDoses(client.getAcceptedDoses())
                 .name(client.getName())
                 .surname(client.getSurname())
                 .email(client.getEmail())

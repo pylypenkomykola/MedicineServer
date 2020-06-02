@@ -10,8 +10,6 @@ import java.io.Serializable;
 import java.util.Set;
 
 public class AcceptedDoseDto implements Serializable {
-    private Client client;
-    private Cure cure;
     private boolean accepted;
     private boolean delayed;
 
@@ -19,20 +17,10 @@ public class AcceptedDoseDto implements Serializable {
     }
 
     private AcceptedDoseDto(Builder builder) {
-        this.client = builder.client;
-        this.cure = builder.cure;
         this.accepted = builder.accepted;
         this.delayed = builder.delayed;
     }
 
-
-    public Client getClient() {
-        return client;
-    }
-
-    public Cure getCure() {
-        return cure;
-    }
 
     public boolean isAccepted() {
         return accepted;
@@ -43,26 +31,12 @@ public class AcceptedDoseDto implements Serializable {
     }
 
     public static final class Builder{
-        private Client client;
-        private Cure cure;
         private boolean accepted;
         private boolean delayed;
 
         public Builder(AcceptedDoseDto copy){
-            this.client = copy.getClient();
-            this.cure = copy.getCure();
             this.accepted = copy.isAccepted();
             this.delayed = copy.isDelayed();
-        }
-
-        public Builder client(Client client){
-            this.client = client;
-            return this;
-        }
-
-        public Builder cure(Cure cure){
-            this.cure = cure;
-            return this;
         }
 
         public Builder accepted(boolean accepted){

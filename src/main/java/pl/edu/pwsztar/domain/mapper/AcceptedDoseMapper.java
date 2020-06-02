@@ -10,8 +10,6 @@ public class AcceptedDoseMapper implements Convert<AcceptedDoseDto, AcceptedDose
     @Override
     public AcceptedDose convert(AcceptedDoseDto acceptedDose){
         return new AcceptedDose.Builder()
-                .cure(acceptedDose.getCure())
-                .client(acceptedDose.getClient())
                 .accepted(acceptedDose.isAccepted())
                 .delayed(acceptedDose.isDelayed())
                 .build();

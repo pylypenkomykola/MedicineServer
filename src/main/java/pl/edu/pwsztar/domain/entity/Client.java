@@ -3,6 +3,7 @@ package pl.edu.pwsztar.domain.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -46,13 +47,13 @@ public class Client implements Serializable {
     private Set<AcceptedDose> acceptedDoses;
 
     @OneToMany(mappedBy = "client")
-    private Set<ClientDose> dose;
+    private List<ClientDose> dose;
 
     public Set<AcceptedDose> getAcceptedDoses() {
         return acceptedDoses;
     }
 
-    public Set<ClientDose> getDose() {
+    public List<ClientDose> getDose() {
         return dose;
     }
 
@@ -83,7 +84,7 @@ public class Client implements Serializable {
     public static final class Builder{
         private Long clientId;
         private Set<AcceptedDose> acceptedDoses;
-        private Set<ClientDose> dose;
+        private List<ClientDose> dose;
         private String email;
         private String name;
         private String surname;
@@ -114,7 +115,7 @@ public class Client implements Serializable {
             return this;
         }
 
-        public Builder dose(Set<ClientDose> dose){
+        public Builder dose(List<ClientDose> dose){
             this.dose=dose;
             return this;
         }

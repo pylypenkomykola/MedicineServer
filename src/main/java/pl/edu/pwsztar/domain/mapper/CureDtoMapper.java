@@ -16,11 +16,9 @@ public class CureDtoMapper implements Convert<List<Cure>, List<CureDto>> {
                 .map( value ->{
                 return new CureDto.Builder()
                         .name(value.getName())
-                        .dose(value.getDose())
                         .dailyDose(value.getDailyDose())
                         .doseNumber(value.getDoseNumber())
                         .doseTimestamp(value.getDoseTimestamp())
-                        .acceptedDose(value.getAcceptedDose())
                         .build();
                 })
                 .collect(Collectors.toList());

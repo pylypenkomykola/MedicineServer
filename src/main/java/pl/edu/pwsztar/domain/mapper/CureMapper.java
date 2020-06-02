@@ -11,11 +11,9 @@ public class CureMapper implements Convert<CureDto, Cure> {
     public Cure convert(CureDto cure){
         return new Cure.Builder()
                 .name(cure.getName())
-                .dose(cure.getDose())
                 .dailyDose(cure.getDailyDose())
                 .doseNumber(cure.getDoseNumber())
                 .doseTimestamp(cure.getDoseTimestamp())
-                .acceptedDose(cure.getAcceptedDose())
                 .build();
     }
 }

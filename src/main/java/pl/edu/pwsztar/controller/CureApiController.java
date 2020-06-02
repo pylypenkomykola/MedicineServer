@@ -1,5 +1,7 @@
 package pl.edu.pwsztar.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,6 +20,9 @@ public class CureApiController {
     private final CureService cureService;
     private final ClientDoseService clientDoseService;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(CureApiController.class);
+
+
     @Autowired
     public CureApiController(ClientDoseService clientDoseService, CureService cureService){
         this.cureService=cureService;
@@ -26,11 +31,13 @@ public class CureApiController {
 
     @CrossOrigin
     @PostMapping(value = "/{userId}/create", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Void> createCure(@PathVariable Long userId, @RequestBody CureDto cure) {
+    public ResponseEntity<Boolean> createCure(@PathVariable Long userId, @RequestBody CureDto cure) {
+        boolean result;
 
-        cureService.createNewCure(userId, cure);
+        result = cureService.createNewCure(userId, cure);
+        LOGGER.info("Medicine was created " + result);
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
     @CrossOrigin
@@ -39,15 +46,16 @@ public class CureApiController {
 
         cureService.deleteCure(userId,cure);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(true, HttpStatus.OK);
     }
 
     @CrossOrigin
     @GetMapping(value = "/{userId}/allCures", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<List<CureDto>> getCure(@PathVariable Long userId) {
+    public ResponseEntity<Object> getCure(@PathVariable Long userId) {
         List<CureDto> data = null;
 
         data = clientDoseService.getAllCure(userId);
+
 
         return new ResponseEntity<>(data, HttpStatus.OK);
     }

@@ -29,12 +29,17 @@ public class AcceptedDose implements Serializable {
     @Column(name="delayed")
     private boolean delayed;
 
+    @Column(name="date")
+    private String date;
+
     public AcceptedDose() {
     }
 
     private AcceptedDose(Builder builder) {
+        this.id = builder.id;
         this.client = builder.client;
         this.cure = builder.cure;
+        this.date = builder.date;
         this.accepted = builder.accepted;
         this.delayed = builder.delayed;
     }
@@ -59,12 +64,17 @@ public class AcceptedDose implements Serializable {
         return delayed;
     }
 
+    public String getDate() {
+        return date;
+    }
+
     public static final class Builder{
         private AcceptedDoseKey id;
         private Client client;
         private Cure cure;
         private boolean accepted;
         private boolean delayed;
+        private String date;
 
         public Builder() {
         }
@@ -73,6 +83,7 @@ public class AcceptedDose implements Serializable {
             this.id = copy.getId();
             this.client = copy.getClient();
             this.cure = copy.getCure();
+            this.date = copy.getDate();
             this.accepted = copy.isAccepted();
             this.delayed = copy.isDelayed();
         }
@@ -87,8 +98,14 @@ public class AcceptedDose implements Serializable {
             return this;
         }
 
+
         public Builder cure(Cure cure){
             this.cure = cure;
+            return this;
+        }
+
+        public Builder date(String date){
+            this.date = date;
             return this;
         }
 

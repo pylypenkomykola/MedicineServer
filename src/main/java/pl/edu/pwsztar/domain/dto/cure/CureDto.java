@@ -13,9 +13,6 @@ public class CureDto implements Serializable {
     private Integer dailyDose;
     private Integer doseTimestamp;
     private Integer doseNumber;
-    private Set<ClientDose> dose;
-    private Set<AcceptedDose> acceptedDose;
-
 
     public CureDto() {
     }
@@ -25,8 +22,6 @@ public class CureDto implements Serializable {
         this.dailyDose = builder.dailyDose;
         this.doseTimestamp = builder.doseTimestamp;
         this.doseNumber = builder.doseNumber;
-        this.dose = builder.dose;
-        this.acceptedDose = builder.acceptedDose;
     }
 
     public String getName() {
@@ -45,21 +40,12 @@ public class CureDto implements Serializable {
         return doseNumber;
     }
 
-    public Set<ClientDose> getDose() {
-        return dose;
-    }
-
-    public Set<AcceptedDose> getAcceptedDose() {
-        return acceptedDose;
-    }
 
     public static final class Builder{
         private String name;
         private Integer dailyDose;
         private Integer doseTimestamp;
         private Integer doseNumber;
-        private Set<ClientDose> dose;
-        private Set<AcceptedDose> acceptedDose;
 
         public Builder name(String name){
             this.name = name;
@@ -81,15 +67,6 @@ public class CureDto implements Serializable {
             return this;
         }
 
-        public Builder dose(Set<ClientDose> dose){
-            this.dose = dose;
-            return this;
-        }
-
-        public Builder acceptedDose(Set<AcceptedDose> acceptedDose){
-            this.acceptedDose = acceptedDose;
-            return this;
-        }
 
         public CureDto build(){
             return new CureDto(this);

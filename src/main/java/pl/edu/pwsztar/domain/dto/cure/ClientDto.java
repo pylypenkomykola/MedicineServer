@@ -4,11 +4,10 @@ import pl.edu.pwsztar.domain.entity.AcceptedDose;
 import pl.edu.pwsztar.domain.entity.ClientDose;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 public class ClientDto implements Serializable {
-    private Set<AcceptedDose> acceptedDoses;
-    private Set<ClientDose> dose;
     private String email;
     private String name;
     private String surname;
@@ -20,8 +19,6 @@ public class ClientDto implements Serializable {
     }
 
     private ClientDto(Builder builder) {
-        this.acceptedDoses = builder.acceptedDoses;
-        this.dose = builder.dose;
         this.email = builder.email;
         this.name = builder.name;
         this.surname = builder.surname;
@@ -30,13 +27,6 @@ public class ClientDto implements Serializable {
     }
 
 
-    public Set<AcceptedDose> getAcceptedDoses() {
-        return acceptedDoses;
-    }
-
-    public Set<ClientDose> getDose() {
-        return dose;
-    }
 
     public String getEmail() {
         return email;
@@ -59,8 +49,6 @@ public class ClientDto implements Serializable {
     }
 
     public static final class Builder{
-        private Set<AcceptedDose> acceptedDoses;
-        private Set<ClientDose> dose;
         private String email;
         private String name;
         private String surname;
@@ -71,8 +59,6 @@ public class ClientDto implements Serializable {
         }
 
         public Builder(ClientDto copy) {
-            this.acceptedDoses = copy.getAcceptedDoses();
-            this.dose = copy.getDose();
             this.email = copy.getEmail();
             this.name = copy.getName();
             this.surname = copy.getSurname();
@@ -80,16 +66,6 @@ public class ClientDto implements Serializable {
             this.password = copy.getPassword();
         }
 
-
-        public Builder acceptedDoses(Set<AcceptedDose> acceptedDoses){
-            this.acceptedDoses=acceptedDoses;
-            return this;
-        }
-
-        public Builder dose(Set<ClientDose> dose){
-            this.dose=dose;
-            return this;
-        }
 
         public Builder email(String email){
             this.email=email;

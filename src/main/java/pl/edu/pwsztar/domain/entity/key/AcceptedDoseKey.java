@@ -18,6 +18,11 @@ public class AcceptedDoseKey implements Serializable {
     public AcceptedDoseKey() {
     }
 
+    public AcceptedDoseKey(Long clientId, Long cureId) {
+        this.clientId = clientId;
+        this.cureId = cureId;
+    }
+
     public Long getClientId() {
         return clientId;
     }
