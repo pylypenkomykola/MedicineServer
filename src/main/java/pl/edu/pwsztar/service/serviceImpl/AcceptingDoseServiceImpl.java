@@ -95,7 +95,7 @@ public class AcceptingDoseServiceImpl implements AcceptingDoseService {
         Optional<AcceptedDose> checkAcceptedDose = Optional.ofNullable(doseRepository.findInfo(client.getClientId(),cure.getCureId()));
 
         int minutes = (Integer.parseInt(currentTime.substring(11,13)) * 60) + Integer.parseInt(currentTime.substring(14,16));
-        float cureTime = (24/(float)cure.getDoseTimestamp())*60;
+        float cureTime = ((float)cure.getDoseTimestamp())*60;
 
 
 
@@ -159,8 +159,8 @@ public class AcceptingDoseServiceImpl implements AcceptingDoseService {
         for(Client client: clients){
             List<Cure> cures = clientDoseMapper.convert(client.getDose());
             for(Cure cure: cures){
-                float notify = ((24/(float)cure.getDoseTimestamp())*60)-notificationTime;
-                float cureTime = (24/(float)cure.getDoseTimestamp())*60;
+                float notify = (((float)cure.getDoseTimestamp())*60)-notificationTime;
+                float cureTime = ((float)cure.getDoseTimestamp())*60;
 
                 System.out.println("Notify: "+ notify +"\nCure time: "+ cureTime);
 
