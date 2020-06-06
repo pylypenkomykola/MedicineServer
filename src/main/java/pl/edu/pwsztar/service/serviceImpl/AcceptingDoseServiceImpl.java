@@ -161,13 +161,12 @@ public class AcceptingDoseServiceImpl implements AcceptingDoseService {
             List<Cure> cures = clientDoseMapper.convert(client.getDose());
             for(Cure cure: cures){
                 Optional<AcceptedDose> checkAcceptedDose = Optional.ofNullable(doseRepository.findInfo(client.getClientId(),cure.getCureId()));
-                int notify = (cure.getDoseTimestamp()*60)-notificationTime;
                 int cureTime = cure.getDoseTimestamp()*60;
 
-                System.out.println("Notify: "+ notify +"\nCure time: "+ cureTime);
 
-                if(minutes%notify==0){
-                    sendNotification(client,cure, pillTime+(minute+notificationTime));
+
+                if((minutes+notificationTime)%cureTime==0){
+                    sendNotification(client,cure, pillTime+':'+(minute+notificationTime));
                 }
 
                 if(minutes%cureTime == maxDelayTime){
