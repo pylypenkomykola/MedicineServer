@@ -49,7 +49,8 @@ public class AcceptingDoseServiceImpl implements AcceptingDoseService {
         this.clientDoseMapper = clientDoseMapper;
     }
 
-    public void sendNotification(Client client, Cure cure, String time){
+
+    public static void sendNotification(Client client, Cure cure){
         String email = "medicine.notification@gmail.com";
         String password = "198343583";
 
@@ -67,6 +68,9 @@ public class AcceptingDoseServiceImpl implements AcceptingDoseService {
                     }
                 });
 
+        Calendar cal = GregorianCalendar.getInstance();
+        cal.add(Calendar.MINUTE, notificationTime);
+
         try {
             javax.mail.Message message = new javax.mail.internet.MimeMessage(session);
             message.setFrom(new InternetAddress(email));
@@ -77,7 +81,7 @@ public class AcceptingDoseServiceImpl implements AcceptingDoseService {
             message.setSubject("Medicine: " +cure.getName());
             message.setText("Take your medicine called:" + cure.getName() +
                     "\nin dose number: " + cure.getDoseNumber() +
-                    "\nYou have to take your cure in " + time);
+                    "\nYou have to take your cure in " + dateFormat.format(new Date()).substring(0,11) + cal.get(Calendar.HOUR) + ':' + cal.get(Calendar.MINUTE));
 
             javax.mail.Transport.send(message);
 
@@ -92,24 +96,20 @@ public class AcceptingDoseServiceImpl implements AcceptingDoseService {
         Cure cure = cureRepository.findCure(cureDto.getName(),cureDto.getDailyDose(),cureDto.getDoseNumber(),cureDto.getDoseTimestamp());
 
         String currentTime = dateFormat.format(new Date());
-        Optional<AcceptedDose> checkAcceptedDose = Optional.ofNullable(doseRepository.findInfo(client.getClientId(),cure.getCureId()));
+        Optional<AcceptedDose> checkAcceptedDose = Optional.ofNullable(doseRepository.findInfo(client.getClientId(),cure.getCureId(),currentTime.substring(0,13)));
 
         int minutes = (Integer.parseInt(currentTime.substring(11,13)) * 60) + Integer.parseInt(currentTime.substring(14,16));
         int cureTime = cure.getDoseTimestamp()*60;
 
 
-        if(minutes%cureTime == 0){
+        if(checkAcceptedDose.isEmpty() && minutes%cureTime == 0){
             AcceptedDose acceptedDose = new AcceptedDose.Builder().id(new AcceptedDoseKey(client.getClientId(),cure.getCureId(),currentTime)).accepted(true).delayed(false).client(client).cure(cure).date(currentTime).build();
-            if(checkAcceptedDose.isEmpty() || !checkAcceptedDose.get().getDate().equals(currentTime)) {
                 doseRepository.save(acceptedDose);
                 return true;
-            }
-        } else if (minutes%cureTime < maxDelayTime && minutes%cureTime != 0){
+        } else if (checkAcceptedDose.isEmpty() && minutes%cureTime < maxDelayTime && minutes%cureTime > 0){
             AcceptedDose acceptedDose = new AcceptedDose.Builder().id(new AcceptedDoseKey(client.getClientId(),cure.getCureId(),currentTime)).accepted(true).delayed(true).client(client).cure(cure).date(currentTime).build();
-            if(checkAcceptedDose.isEmpty() || !checkAcceptedDose.get().getDate().substring(0,13).equals(currentTime.substring(0,13))) {
                 doseRepository.save(acceptedDose);
                 return true;
-            }
         }
 
         return false;
@@ -160,26 +160,19 @@ public class AcceptingDoseServiceImpl implements AcceptingDoseService {
         for(Client client: clients){
             List<Cure> cures = clientDoseMapper.convert(client.getDose());
             for(Cure cure: cures){
-                Optional<AcceptedDose> checkAcceptedDose = Optional.ofNullable(doseRepository.findInfo(client.getClientId(),cure.getCureId()));
+                Optional<AcceptedDose> checkAcceptedDose = Optional.ofNullable(doseRepository.findInfo(client.getClientId(),cure.getCureId(),currentTime.substring(0,13)));
                 int cureTime = cure.getDoseTimestamp()*60;
 
-
-
                 if((minutes+notificationTime)%cureTime==0){
-                    sendNotification(client,cure, pillTime+':'+(minute+notificationTime));
+                    sendNotification(client,cure);
                 }
 
-                if(minutes%cureTime == maxDelayTime){
-                    if(checkAcceptedDose.isPresent()){
-                        AcceptedDose acceptedDose = checkAcceptedDose.get();
-                        if(!acceptedDose.getDate().substring(0,13).equals(pillTime)){
-                            doseRepository.save(new AcceptedDose.Builder().id(new AcceptedDoseKey(client.getClientId(),cure.getCureId(),currentTime)).accepted(false).delayed(false).client(client).cure(cure).date(currentTime).build());
-                        }
-                    }else{
-                        doseRepository.save(new AcceptedDose.Builder().id(new AcceptedDoseKey(client.getClientId(),cure.getCureId(),currentTime)).accepted(false).delayed(false).client(client).cure(cure).date(currentTime).build());
-                    }
+                if(minutes%cureTime == maxDelayTime && checkAcceptedDose.isEmpty()){
+                    doseRepository.save(new AcceptedDose.Builder().id(new AcceptedDoseKey(client.getClientId(),cure.getCureId(),currentTime)).accepted(false).delayed(false).client(client).cure(cure).date(currentTime).build());
                 }
             }
         }
     }
+
 }
+
