@@ -38,7 +38,7 @@ public class ClientDoseServiceImpl implements ClientDoseService {
     public boolean addCureForClient(Long userId, Cure cure) {
         Optional<Client> clientExists = clientRepository.findById(userId);
 
-        if (clientExists.isPresent()){
+        if (clientExists.isPresent() && cure != null){
             Client client = clientExists.get();
             ClientDose clientDose = new ClientDose.Builder().clientDoseKey(new ClientDoseKey(client.getClientId(),cure.getCureId())).client(client).cure(cure).build();
             clientDoseRepository.save(clientDose);

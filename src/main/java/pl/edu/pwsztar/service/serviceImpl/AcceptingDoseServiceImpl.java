@@ -35,6 +35,7 @@ public class AcceptingDoseServiceImpl implements AcceptingDoseService {
 
     private static final Integer notificationTime = 10;
     private static final Integer maxDelayTime = 1;
+    private static final Integer testAddingTime = 0;
 
 
     @Autowired
@@ -81,7 +82,7 @@ public class AcceptingDoseServiceImpl implements AcceptingDoseService {
             message.setSubject("Medicine: " +cure.getName());
             message.setText("Take your medicine called:" + cure.getName() +
                     "\nin dose number: " + cure.getDoseNumber() +
-                    "\nYou have to take your cure in " + dateFormat.format(new Date()).substring(0,11) + cal.get(Calendar.HOUR) + ':' + cal.get(Calendar.MINUTE));
+                    "\nYou have to take your cure in " + dateFormat.format(new Date()).substring(0,11) + cal.get(Calendar.HOUR) + ':' + (cal.get(Calendar.MINUTE) < 10 ? ('0'+cal.get(Calendar.MINUTE)) : cal.get(Calendar.MINUTE)));
 
             javax.mail.Transport.send(message);
 
@@ -98,7 +99,7 @@ public class AcceptingDoseServiceImpl implements AcceptingDoseService {
         String currentTime = dateFormat.format(new Date());
         Optional<AcceptedDose> checkAcceptedDose = Optional.ofNullable(doseRepository.findInfo(client.getClientId(),cure.getCureId(),currentTime.substring(0,13)));
 
-        int minutes = (Integer.parseInt(currentTime.substring(11,13)) * 60) + Integer.parseInt(currentTime.substring(14,16));
+        int minutes = (Integer.parseInt(currentTime.substring(11,13)) * 60) + Integer.parseInt(currentTime.substring(14,16)) + testAddingTime;
         int cureTime = cure.getDoseTimestamp()*60;
 
 
@@ -152,7 +153,6 @@ public class AcceptingDoseServiceImpl implements AcceptingDoseService {
         String currentTime = dateFormat.format(new Date());
         int minute = Integer.parseInt(currentTime.substring(14,16));
         int minutes = (Integer.parseInt(currentTime.substring(11,13)) * 60) + minute;
-        String pillTime = currentTime.substring(0,13);
 
 
         List<Client> clients = clientRepository.findAll();
