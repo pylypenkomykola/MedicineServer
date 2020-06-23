@@ -82,7 +82,7 @@ public class AcceptingDoseServiceImpl implements AcceptingDoseService {
             message.setSubject("Medicine: " +cure.getName());
             message.setText("Take your medicine called:" + cure.getName() +
                     "\nin dose number: " + cure.getDoseNumber() +
-                    "\nYou have to take your cure in " + dateFormat.format(new Date()).substring(0,11) + cal.get(Calendar.HOUR) + ':' + (cal.get(Calendar.MINUTE) < 10 ? ('0'+cal.get(Calendar.MINUTE)) : cal.get(Calendar.MINUTE)));
+                    "\nYou have to take your cure in " + dateFormat.format(new Date()).substring(0,11) + cal.get(Calendar.HOUR) + ':' + cal.get(Calendar.MINUTE));
 
             javax.mail.Transport.send(message);
 
@@ -152,7 +152,7 @@ public class AcceptingDoseServiceImpl implements AcceptingDoseService {
     public void acceptingDose(){
         String currentTime = dateFormat.format(new Date());
         int minute = Integer.parseInt(currentTime.substring(14,16));
-        int minutes = (Integer.parseInt(currentTime.substring(11,13)) * 60) + minute;
+        int minutes = (Integer.parseInt(currentTime.substring(11,13)) * 60) + minute + testAddingTime;
 
 
         List<Client> clients = clientRepository.findAll();
